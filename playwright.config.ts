@@ -6,6 +6,8 @@ import { defineConfig, devices } from '@playwright/test'
  */
 import 'dotenv/config'
 
+const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -30,7 +32,12 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      use: {
+        ...devices['Desktop Chrome'],
+        ...(executablePath
+          ? { launchOptions: { executablePath } }
+          : { channel: 'chromium' as const }),
+      },
     },
   ],
   webServer: {

@@ -169,6 +169,10 @@ export interface Media {
  */
 export interface Page {
   id: number;
+  /**
+   * Use / for the homepage or a URL segment such as features.
+   */
+  slug: string;
   title: string;
   content: {
     root: {
@@ -311,6 +315,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
+  slug?: T;
   title?: T;
   content?: T;
   updatedAt?: T;

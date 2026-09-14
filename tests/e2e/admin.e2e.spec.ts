@@ -45,7 +45,10 @@ test.describe('Admin Panel', () => {
     await expect(page).toHaveURL(/\/admin\/collections\/pages\/create/)
 
     await expect(page.locator('input[name="title"]')).toBeVisible()
-    const richTextEditor = page.locator('[contenteditable="true"], .rich-text, div[class*="lexical"]').first()
+    await expect(page.locator('input[name="slug"]')).toBeVisible()
+    const richTextEditor = page
+      .locator('[contenteditable="true"], .rich-text, div[class*="lexical"]')
+      .first()
     await expect(richTextEditor).toBeVisible()
   })
 })

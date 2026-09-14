@@ -23,6 +23,7 @@ test.describe('Admin Panel', () => {
     await expect(page).toHaveURL('http://localhost:3000/admin')
     const dashboardArtifact = page.locator('span[title="Dashboard"]').first()
     await expect(dashboardArtifact).toBeVisible()
+    await expect(page.locator('#nav-pages')).toBeVisible()
   })
 
   test('can navigate to list view', async () => {
@@ -37,5 +38,14 @@ test.describe('Admin Panel', () => {
     await expect(page).toHaveURL(/\/admin\/collections\/users\/[a-zA-Z0-9-_]+/)
     const editViewArtifact = page.locator('input[name="email"]')
     await expect(editViewArtifact).toBeVisible()
+  })
+
+  test('Pages create view shows the RichText content editor (lexical)', async () => {
+    await page.goto('http://localhost:3000/admin/collections/pages/create')
+    await expect(page).toHaveURL(/\/admin\/collections\/pages\/create/)
+
+    await expect(page.locator('input[name="title"]')).toBeVisible()
+    const richTextEditor = page.locator('[contenteditable="true"], .rich-text, div[class*="lexical"]').first()
+    await expect(richTextEditor).toBeVisible()
   })
 })

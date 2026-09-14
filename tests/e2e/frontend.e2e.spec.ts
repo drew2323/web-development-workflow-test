@@ -1,20 +1,97 @@
-import { test, expect, Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
+import { getPayload } from 'payload'
+
+import config from '../../src/payload.config.js'
+
+const testPageTitle = 'Homepage E2E'
+
+const richText = (text: string) => ({
+  root: {
+    children: [
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: 'normal' as const,
+            style: '',
+            text,
+            type: 'text',
+            version: 1,
+          },
+        ],
+        direction: 'ltr' as const,
+        format: '' as const,
+        indent: 0,
+        type: 'paragraph',
+        version: 1,
+      },
+    ],
+    direction: 'ltr' as const,
+    format: '' as const,
+    indent: 0,
+    type: 'root',
+    version: 1,
+  },
+})
 
 test.describe('Frontend', () => {
-  let page: Page
-
-  test.beforeAll(async ({ browser }, testInfo) => {
-    const context = await browser.newContext()
-    page = await context.newPage()
+  test.beforeEach(async () => {
+    const payload = await getPayload({ config })
+    await payload.delete({
+      collection: 'pages',
+      where: { title: { equals: testPageTitle } },
+    })
   })
 
-  test('can go on homepage', async ({ page }) => {
+  test.afterEach(async () => {
+    const payload = await getPayload({ config })
+    await payload.delete({
+      collection: 'pages',
+      where: { title: { equals: testPageTitle } },
+    })
+  })
+
+  test('renders the exact fallback when no Page exists', async ({ page }) => {
+    const payload = await getPayload({ config })
+    await payload.delete({ collection: 'pages', where: {} })
+
+    const response = await page.goto('http://localhost:3000')
+
+    expect(response?.status()).toBe(200)
+    await expect(page.locator('.home')).toHaveText('Hello world')
+  })
+
+  test('reflects Page rich-text edits without horizontal overflow', async ({ page }) => {
+    const payload = await getPayload({ config })
+    const createdPage = await payload.create({
+      collection: 'pages',
+      data: {
+        title: testPageTitle,
+        content: richText('Initial homepage content'),
+      },
+    })
+
     await page.goto('http://localhost:3000')
+    await expect(page.getByText('Initial homepage content')).toBeVisible()
 
-    await expect(page).toHaveTitle(/Payload Blank Template/)
+    await payload.update({
+      collection: 'pages',
+      id: createdPage.id,
+      data: { content: richText('Edited homepage content') },
+    })
 
-    const heading = page.locator('h1').first()
+    await page.reload()
+    await expect(page.getByText('Edited homepage content')).toBeVisible()
 
-    await expect(heading).toHaveText('Welcome to your new project.')
+    for (const viewport of [
+      { width: 375, height: 667 },
+      { width: 1366, height: 768 },
+    ]) {
+      await page.setViewportSize(viewport)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+        true,
+      )
+    }
   })
 })

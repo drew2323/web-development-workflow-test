@@ -40,7 +40,7 @@ test.describe('Admin Panel', () => {
     await expect(editViewArtifact).toBeVisible()
   })
 
-  test('Pages create view shows the RichText content editor (lexical)', async ({ page }) => {
+  test('Pages create view shows the RichText content editor (lexical)', async () => {
     await page.goto('http://localhost:3000/admin/collections/pages/create')
     await expect(page).toHaveURL(/\/admin\/collections\/pages\/create/)
 

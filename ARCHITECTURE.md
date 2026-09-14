@@ -1,6 +1,6 @@
 # Architecture
 
-**Status:** APPROVED
+**Status:** ARCHITECTURE_READY
 **Owner:** David Brázda
 **Last updated:** 2026-09-12
 

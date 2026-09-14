@@ -1,5 +1,5 @@
 #!/bin/sh
 set -eu
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-"$SCRIPT_DIR/migrate.sh"
+printf 'pre-deploy failed: deprecated; leave Coolify pre-deploy empty and use scripts/start.sh\n' >&2
+exit 2

@@ -1,6 +1,6 @@
 # Zadání – test vývojového workflow
 
-**Status:** APPROVED
+**Status:** SPEC_READY
 **Owner:** David Brázda
 **Schváleno:** 2026-09-12
 

@@ -2,5 +2,6 @@
 set -eu
 
 : "${DATABASE_URL:?DATABASE_URL is required}"
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
-corepack pnpm run payload -- migrate
+exec node "$SCRIPT_DIR/migrate.mjs"

@@ -39,4 +39,13 @@ test.describe('Admin Panel', () => {
     const editViewArtifact = page.locator('input[name="email"]')
     await expect(editViewArtifact).toBeVisible()
   })
+
+  test('Pages create view shows the RichText content editor (lexical)', async ({ page }) => {
+    await page.goto('http://localhost:3000/admin/collections/pages/create')
+    await expect(page).toHaveURL(/\/admin\/collections\/pages\/create/)
+
+    await expect(page.locator('input[name="title"]')).toBeVisible()
+    const richTextEditor = page.locator('[contenteditable="true"], .rich-text, div[class*="lexical"]').first()
+    await expect(richTextEditor).toBeVisible()
+  })
 })

@@ -1,24 +1,17 @@
-import { RichText } from '@payloadcms/richtext-lexical/react'
-import { connection } from 'next/server'
-import { getPayload } from 'payload'
-
-import config from '@/payload.config'
+import { LandingPage } from './landing-page'
+import { getNavigationPages, getPageBySlug } from './page-data'
 import './styles.css'
 
+export async function generateMetadata() {
+  const page = await getPageBySlug('/')
+  return { description: page?.title ?? 'Hello world', title: page?.title ?? 'Hello world' }
+}
+
 export default async function HomePage() {
-  await connection()
-
-  const payload = await getPayload({ config })
-  const pages = await payload.find({
-    collection: 'pages',
-    limit: 1,
-    sort: 'createdAt',
-  })
-  const page = pages.docs[0]
-
-  return (
-    <div className="home">
-      {page ? <RichText data={page.content} /> : <p>Hello world</p>}
-    </div>
+  const [page, navigation] = await Promise.all([getPageBySlug('/'), getNavigationPages()])
+  return page ? (
+    <LandingPage navigation={navigation} page={page} />
+  ) : (
+    <div className="home">Hello world</div>
   )
 }

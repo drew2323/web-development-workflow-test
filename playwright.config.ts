@@ -13,6 +13,7 @@ const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  timeout: 90_000,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */

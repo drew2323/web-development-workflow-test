@@ -1,6 +1,6 @@
 # Project Infrastructure
 
-**Status:** DRAFT
+**Status:** INFRASTRUCTURE_READY
 **Project:** Test vývojového workflow webu
 **Owner:** David Brázda
 
@@ -57,7 +57,11 @@ Secrets jsou uloženy mimo Git v Coolify nebo lokálním necommitovaném `.env`.
 - Runtime-only secrets verified: ano; production i preview `is_buildtime=false`, `is_runtime=true`
 - First deployment migration verified: původní deadlock reprodukován; opravený `scripts/start.sh` ověřen lokálně na čisté DB, při opakovaném startu i při dvou souběžných kontejnerech (`CONCURRENT_START_OK`, jedna migration row); vzdálený důkaz čeká na commit
 - Preview teardown verified: ano; po zavření PR nezůstal preview kontejner
-- Rollback verified: TBD
+- Rollback verified: ano; rollback vyžaduje plný commit SHA (krátký SHA Coolify fetch selže), produkce se vrátila na `c40604f`
+- Rollback evidence: `bh3kg3xrucpmqqeph9aodod1` (finished)
+- Merge→production evidence: `dgazochtme2t9s7zlpvsijgx` (finished, marker `e4622f6`)
+- Preview PR: `https://github.com/drew2323/web-development-workflow-test/pull/2` (sloučený)
+- Preview deployment: `6prtdlpx9fx5f0lpk8agocuf` (finished, preview DB `rd5k244j7kvrpcmnepjkltpl`)
 - Evidence: GitHub CI run `34686989715`; Coolify production deployment `cqbfr8cernnbhu3wiqfoepkq`; automatický preview deployment `cggde505vmlauyz0wwmirs6b`
 
 Status lze změnit na `INFRASTRUCTURE_READY` pouze po úspěšném průchodu Git → Coolify → VPS → HTTPS a ověření preview z testovacího PR.

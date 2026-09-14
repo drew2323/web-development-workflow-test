@@ -1,50 +1,55 @@
-# Development Handoff
+# Change Request – Editable homepage via Payload Pages collection
 
 ```text
-TASK: Hello World stránka – test initial implementation
+TASK: Zobrazit a upravit „první stranku“ v Payload admin + homepage čítá z Pages
 STATUS: HANDOFF_READY
-APPROVED BY: David Brázda (2026-09-14)
+APPROVED BY: David Brázda (2026-09-14, posláno do vývoje; preview – commit čeká lidské potvrzenie)
 
 SCOPE:
-- Veřejná kořenová stránka zobrazí text „Hello world“.
-- Stránka ostane použitelná na mobilu a notebooku (bez vodorovného overflow).
-- Readiness endpoint `/api/health` zůstane funkční a bude ověřovat aplikaci i databázi.
-- Postupující lokální gates (lint, typecheck, testy, produkční build) zverované přes `scripts/quality.sh`.
-- Změna na samostatné feature branchi, commit a pull request.
+- Nová Payload kolekce `Pages` (slug: pages), viditelná ve sidebarn adminu vedle Users a Media.
+- Kolekce obsahuje minimálně polí: title a editačný obsah (rich text) pro stránku.
+- Domovská (kořenová) stránka čítá obsah z kolekce Pages; výchozí/zálohovaný obsah je text „Hello world“.
+- Kdy v adminu pán upraví obsah Page, změna se odrazí na veřejné domovske stránce.
+- Registrace kolekce v `src/payload.config.ts`.
+- Nová versovaná migrace, která vytvoří `pages` tabulku (a rels) v DB; migrace se spustí automaticky přes `scripts/start.sh`.
 
 ACCEPTANCE CRITERIA:
-- Na kořenové URL je viditelný přesný text `Hello world` (HTTP 200).
-- Stránka nemá zjevný horizontální overflow při běžné mobilní ani desktopové šířce.
-- `/api/health` vrací HTTP 200 pouze při dostupné aplikaci a databázi.
-- Relevantní testy, lint, typecheck a produkční build projdou.
-- Coolify poskytne samostatnou HTTPS preview URL pro pull request.
+- Po přihlášení do `/admin` je ve sidebarnu kolekce „Pages“ (vedle Users a Media).
+- Domovská URL vrací HTTP 200 a zobrazuje obsah domovske Page; bez žiadné Page existuje fallback „Hello world“.
+- Stránka nemá zjevný horizontálny overflow při běžné mobilní (375px) ani desktopové (1366px) šířce.
+- `/api/health` vrací HTTP 200 (aplikace + DB).
+- Lokálne gates projdou přes `scripts/quality.sh` (LOCAL_OK).
+- CI green a Coolify preview URL existuje.
+- Implementace na samostatní branchi a pull requestu.
 
 INPUTS:
-- SPEC.md (STATUS: SPEC_READY, schváleno 2026-09-12)
-- ARCHITECTURE.md (STATUS: ARCHITECTURE_READY, schváleno 2026-09-12)
+- SPEC.md (SPEC_READY)
+- ARCHITECTURE.md (ARCHITECTURE_READY)
 - WEB_PLATFORM.md
-- PROJECT-INFRASTRUCTURE.md (STATUS: INFRASTRUCTURE_READY)
+- PROJECT-INFRASTRUCTURE.md (INFRASTRUCTURE_READY)
+- DEVELOPMENT-HANDOFF.md (HANDOFF_READY)
 - AGENTS.md
 
 TARGET:
 - repository: https://github.com/drew2323/web-development-workflow-test
-- branch: feat/hello-world
+- branch: feat/pages-collection
 
 WORKER:
-- Codex CLI (headless, `--sandbox danger-full-access`)
+- Codex CLI (headless)
 
 EXPECTED RESULT:
-- implementation „Hello world“ na kořenové stránce
-- lokálne gates green přes `scripts/quality.sh`
-- CI green
-- commit a pull request
+- Pages kolekce v adminu
+- homepage čítá z Pages s fallback „Hello world“
+- lokálne gates green (`scripts/quality.sh`), CI green
+- commit a PR
 - Coolify preview URL, nebo explicit blocker
 
 OUT OF SCOPE:
 - Změna deployment mechanismu, Dockerfile, deploy hooků, healthcheck u webhooku.
 - Změna sdílené webové platformy či architektury.
-- Merge implementačního PR do produkce bez lidského schválení preview.
-- `scripts/preflight.sh --infrastructure` — infrastrukturní gate zodpovědnosti Team Agent/Hermes, worker ho neprovádí.
+- Změna produkčné data.
+- Merge do produkce a nasazení bez lidského schválení preview.
+- `scripts/preflight.sh --infrastructure` (gate zodpovědnosti Team Agenta, worker neprovádí).
 ```
 
-Stav je `HANDOFF_READY` po explicitním schválení scope a architektury Davidem (SPEC `SPEC_READY`, ARCHITECTURE `ARCHITECTURE_READY`, oba 2026-09-12; tato continuation schváluje start implementace 2026-09-14). Založeno podle `WEB_DELIVERY_WORKFLOW.md` (`HANDOFF_READY`): Codex dostane pouze tento schválený handoff, neprovisionuje infrastrukturu ani nemění deployment mechanismus.
+Contentorizácia: Toto je change request na existujíci projekt; používá existující Payload platformu. Worker navede přesně WHAT/acceptance; HOW (pole, migrace, spiritu) rozhoduje Codex podle repozitáře a AGENTS.md.

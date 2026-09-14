@@ -35,7 +35,8 @@ WORKER:
 
 EXPECTED RESULT:
 - implementation „Hello world“ na kořenové stránce
-- provisional quality gates green (scripts/quality.sh)
+- lokálne gates green přes `scripts/quality.sh`
+- CI green
 - commit a pull request
 - Coolify preview URL, nebo explicit blocker
 
@@ -43,6 +44,7 @@ OUT OF SCOPE:
 - Změna deployment mechanismu, Dockerfile, deploy hooků, healthcheck u webhooku.
 - Změna sdílené webové platformy či architektury.
 - Merge implementačního PR do produkce bez lidského schválení preview.
+- `scripts/preflight.sh --infrastructure` — infrastrukturní gate zodpovědnosti Team Agent/Hermes, worker ho neprovádí.
 ```
 
 Stav je `HANDOFF_READY` po explicitním schválení scope a architektury Davidem (SPEC `SPEC_READY`, ARCHITECTURE `ARCHITECTURE_READY`, oba 2026-09-12; tato continuation schváluje start implementace 2026-09-14). Založeno podle `WEB_DELIVERY_WORKFLOW.md` (`HANDOFF_READY`): Codex dostane pouze tento schválený handoff, neprovisionuje infrastrukturu ani nemění deployment mechanismus.

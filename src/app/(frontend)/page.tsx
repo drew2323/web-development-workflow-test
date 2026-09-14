@@ -29,6 +29,9 @@ export default async function HomePage() {
         </picture>
         {!user && <h1>Welcome to your new project.</h1>}
         {user && <h1>Welcome back, {user.email}</h1>}
+        <p data-testid="preview-marker" style={{ marginTop: '1rem' }}>
+          workflow-preview-marker-v2
+        </p>
         <div className="links">
           <a
             className="admin"

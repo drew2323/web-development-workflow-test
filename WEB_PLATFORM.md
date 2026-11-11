@@ -1,6 +1,6 @@
 # Web Platform Standard
 
-Projekt používá bez výjimky sdílený standard z `/home/david/Projects/mini-team/standards/WEB_PLATFORM.md` ve stavu platném při bootstrapu 2026-09-12.
+Projekt používá bez výjimky sdílený interní web platform standard ve stavu platném při bootstrapu 2026-09-12.
 
 ## Platforma
 
@@ -8,7 +8,7 @@ Projekt používá bez výjimky sdílený standard z `/home/david/Projects/mini-
 - Payload CMS
 - PostgreSQL
 - GitHub
-- Coolify na `vpswebfarma`
+- Coolify
 - Tailwind CSS a design tokeny pro produktové UI
 
 ## Delivery contract

@@ -25,7 +25,7 @@ Minimální web pro ověření standardního agentního vývojového a doručova
 - Frontend/application: Next.js a TypeScript
 - Content management: Payload CMS jako součást aplikace
 - Data store: PostgreSQL
-- External services: GitHub pro source/PR; Coolify na `vpswebfarma` pro build, HTTPS, preview a deployment
+- External services: GitHub pro source/PR; Coolify pro build, HTTPS, preview a deployment
 
 ## Data and integrations
 
@@ -38,9 +38,9 @@ Minimální web pro ověření standardního agentního vývojového a doručova
 ## Environments and delivery
 
 - Repository: `https://github.com/drew2323/web-development-workflow-test`
-- Production domain: `https://workflow-test.2.56.97.3.sslip.io`
+- Production domain: `sslip.io` doména z Coolify (konkrétní URL v Coolify, ne v repu)
 - Coolify application/project: bude doplněno v `PROJECT-INFRASTRUCTURE.md`
-- Preview strategy: Coolify pull-request deployment; `https://pr-<id>.workflow-test.2.56.97.3.sslip.io`
+- Preview strategy: Coolify pull-request deployment; URL preview vkládá Coolify do PR
 - Health check: `/api/health`, včetně dosažitelnosti databáze
 - Backup and rollback: bez uživatelských dat; Coolify rollback na předchozí release, DB změny pouze verzovanými migracemi
 

@@ -6,17 +6,18 @@
 
 ## Workspace and repository
 
-- Local workspace: `/home/david/Projects/web-development-workflow-test`
 - GitHub repository: `https://github.com/drew2323/web-development-workflow-test`
 - Default branch: `main`
 - Bootstrap commit: `646057374d0811096cc61d131c0acc69aec0c8ce`
 
 ## Environments
 
-| Environment | Domain                                             | Coolify application                                         | Database                   | Source       |
-| ----------- | -------------------------------------------------- | ----------------------------------------------------------- | -------------------------- | ------------ |
-| Production  | `https://workflow-test.2.56.97.3.sslip.io`         | project `th4zol2jzegenk8kubxw5pzx`; app `cx6oiehvhog4l2yf2keordmr` | `ba0eroqzaoj2dwfkgxzfjxkd` | `main`       |
-| Preview     | `https://pr-<id>.workflow-test.2.56.97.3.sslip.io` | PR deployments app `cx6oiehvhog4l2yf2keordmr`                    | `rd5k244j7kvrpcmnepjkltpl` | pull request |
+| Environment | Domain | Database | Source |
+| --- | --- | --- | --- |
+| Production | sslip.io doména z Coolify | samostatná production PostgreSQL | `main` |
+| Preview | `pr-<id>.` doména z Coolify (URL v PR) | samostatná preview PostgreSQL | pull request |
+
+Konkrétní instance (Coolify aplikace, databáze, server, interní URL) nejsou v repu: zjistí se v Coolify podle repa (`coolify where <app>`). Repo je public.
 
 Preview database strategy: `shared-preview`. Současně smí běžet jen jedna změna s migrací.
 
@@ -37,8 +38,7 @@ Preview database strategy: `shared-preview`. Současně smí běžet jen jedna z
 
 ## Persistent resources
 
-- PostgreSQL production: `ba0eroqzaoj2dwfkgxzfjxkd` (`running:healthy`)
-- PostgreSQL preview: `rd5k244j7kvrpcmnepjkltpl` (`running:healthy`)
+- PostgreSQL production a preview: samostatné Coolify databáze
 - Upload/file storage: lokální kontejnerové úložiště; uploady nejsou součástí testu
 - Backup policy: bez uživatelských dat; před datovou změnou Coolify/PostgreSQL backup
 - Restore test: pro tento bezdatový test nahrazen ověřeným aplikačním rollbackem
@@ -47,21 +47,6 @@ Secrets jsou uloženy mimo Git v Coolify nebo lokálním necommitovaném `.env`.
 
 ## First deployment proof
 
-- Skeleton commit: `646057374d0811096cc61d131c0acc69aec0c8ce`
-- Production deployment URL: `https://workflow-test.2.56.97.3.sslip.io`
-- Preview PR: `https://github.com/drew2323/web-development-workflow-test/pull/1` (uzavřený infrastrukturní test)
-- Preview deployment URL: `https://pr-1.workflow-test.2.56.97.3.sslip.io`
-- HTTPS verified: ano, production i preview
-- Healthcheck verified: ano, `scripts/verify.sh`
-- Git webhook verified: ano; GitHub `ping`, `push` a `pull_request` deliveries vrátily 200
-- Runtime-only secrets verified: ano; production i preview `is_buildtime=false`, `is_runtime=true`
-- First deployment migration verified: původní deadlock reprodukován; opravený `scripts/start.sh` ověřen lokálně na čisté DB, při opakovaném startu i při dvou souběžných kontejnerech (`CONCURRENT_START_OK`, jedna migration row); vzdálený důkaz čeká na commit
-- Preview teardown verified: ano; po zavření PR nezůstal preview kontejner
-- Rollback verified: ano; rollback vyžaduje plný commit SHA (krátký SHA Coolify fetch selže), produkce se vrátila na `c40604f`
-- Rollback evidence: `bh3kg3xrucpmqqeph9aodod1` (finished)
-- Merge→production evidence: `dgazochtme2t9s7zlpvsijgx` (finished, marker `e4622f6`)
-- Preview PR: `https://github.com/drew2323/web-development-workflow-test/pull/2` (sloučený)
-- Preview deployment: `6prtdlpx9fx5f0lpk8agocuf` (finished, preview DB `rd5k244j7kvrpcmnepjkltpl`)
-- Evidence: GitHub CI run `34686989715`; Coolify production deployment `cqbfr8cernnbhu3wiqfoepkq`; automatický preview deployment `cggde505vmlauyz0wwmirs6b`
+Ověřeno při bootstrapu (2026-09): Git → Coolify → HTTPS, healthcheck, webhook (`ping`, `push`, `pull_request`), runtime-only secrets, migrace při souběžném startu, preview z testovacího PR i jeho teardown, merge → production a rollback (vyžaduje plný commit SHA). Důkazy (ID deploymentů, CI běhy) jsou v Coolify a GitHubu, ne v repu.
 
 Status lze změnit na `INFRASTRUCTURE_READY` pouze po úspěšném průchodu Git → Coolify → VPS → HTTPS a ověření preview z testovacího PR.

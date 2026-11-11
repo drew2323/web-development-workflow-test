@@ -6,7 +6,7 @@
 4. Pracuj na samostatné branchi. Nikdy necommituj secrets ani produkční data.
 5. Spusť relevantní testy, lint, typecheck a build. Selhání nezakrývej.
 6. Commitni změnu a vytvoř PR. Do výsledku uveď scope, gates, PR, preview a blockery.
-7. Produkci neměň přímo. Nasazení probíhá přes merge do `main` a Coolify.
+7. Produkci neměň přímo. Nasazení probíhá přes merge do `main` a Coolify. Merge řídí `.github/agent.yml`: `merge: auto` → po zeleném CI a ověřeném preview PR sám squash-mergni (merge nasadí produkci); `merge: review` nebo label `merge:review` → nemerguj. Po merge ověř produkci (`/api/health`).
 8. Neměň `Dockerfile`, deploy hooky, healthcheck ani prostředí bez výslovně schváleného infrastrukturního scope.
 
 <!-- BEGIN:nextjs-agent-rules -->
